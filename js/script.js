@@ -2,22 +2,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     const searchBtn = document.getElementById('search-btn');
     const cityInput = document.getElementById('city-input');
+    const stateInput = document.getElementById('state-input');
     const weatherContainer = document.getElementById('weather-container');
     const weatherModal = document.getElementById('weather-modal');
     const modalContent = document.getElementById('modal-content');
     const modalClose = document.querySelector('.modal-close');
 
-    const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+    const apiKey = '7ac58449a473e1de5175cb512d47a950'; // Replace with your OpenWeatherMap API key
 
     searchBtn.addEventListener('click', () => {
         const city = cityInput.value.trim();
-        if (city) {
-            getWeather(city);
+        const state = stateInput.value.trim();
+        if (city && state) {
+            getWeather(city, state);
+        } else {
+            alert('Please enter both city and state names.');
         }
     });
 
-    async function getWeather(city) {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+    async function getWeather(city, state) {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state},US&appid=${apiKey}&units=metric`);
         const data = await response.json();
         displayWeather(data);
     }

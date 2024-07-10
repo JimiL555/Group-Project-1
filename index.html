@@ -9,17 +9,22 @@
 </head>
 <body>
     <section class="section">
-        <div class="container">
-            <h1 class="title">Weather Dashboard</h1>
-            <div class="field has-addons">
-                <div class="control is-expanded">
-                    <input class="input" type="text" placeholder="Enter city name" id="city-input">
-                </div>
-                <div class="control">
-                    <button class="button is-info" id="search-btn">Search</button>
+        <div class="container has-text-centered">
+            <div class="box" id="search-box">
+                <h1 class="title">Weather Dashboard</h1>
+                <div class="field has-addons is-justify-content-center">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter city name" id="city-input">
+                    </div>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter state (e.g., NY)" id="state-input">
+                    </div>
+                    <div class="control">
+                        <button class="button is-info" id="search-btn">Search</button>
+                    </div>
                 </div>
             </div>
-            <div id="weather-container"></div>
+            <div id="weather-container" class="has-text-centered"></div>
         </div>
     </section>
 

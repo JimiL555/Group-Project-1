@@ -3,7 +3,7 @@
 # Weather Dashboard
 
 ## Description
-A weather dashboard that allows users to search for weather conditions in different cities and save their favorite locations.
+A weather dashboard that allows users to search for weather conditions in different cities and states and save their favorite locations.
 
 ## Technologies Used
 - HTML
