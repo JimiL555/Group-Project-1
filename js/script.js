@@ -1,5 +1,5 @@
 document.getElementById('find-earthquakes').addEventListener('click', function() {
-    const earthquakeUrl = `http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=jimiliapis`;
+    const earthquakeUrl = `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson`;
 
     fetch(earthquakeUrl)
         .then(response => {
@@ -10,10 +10,10 @@ document.getElementById('find-earthquakes').addEventListener('click', function()
         })
         .then(data => {
             console.log('Earthquake API response:', data);
-            if (data.earthquakes && data.earthquakes.length > 0) {
-                const sortedEarthquakes = data.earthquakes.sort((a, b) => {
-                    const dateA = new Date(a.datetime);
-                    const dateB = new Date(b.datetime);
+            if (data.features && data.features.length > 0) {
+                const sortedEarthquakes = data.features.sort((a, b) => {
+                    const dateA = new Date(a.properties.time);
+                    const dateB = new Date(b.properties.time);
                     return dateB - dateA;
                 }).slice(0, 10);
                 populateEarthquakeList(sortedEarthquakes);
@@ -32,26 +32,27 @@ function populateEarthquakeList(earthquakes) {
     earthquakeList.innerHTML = '';
 
     earthquakes.forEach((quake, index) => {
+        const date = new Date(quake.properties.time).toLocaleString();
         const option = document.createElement('option');
         option.value = index;
-        option.text = `Date: ${quake.datetime}, Magnitude: ${quake.magnitude}, Coordinates: (${quake.lat}, ${quake.lng})`;
-        option.dataset.lat = quake.lat;
-        option.dataset.lng = quake.lng;
+        option.text = `Date: ${date}, Magnitude: ${quake.properties.mag}, Coordinates: (${quake.geometry.coordinates[1]}, ${quake.geometry.coordinates[0]})`;
+        option.dataset.lat = quake.geometry.coordinates[1];
+        option.dataset.lng = quake.geometry.coordinates[0];
         earthquakeList.add(option);
     });
 
     earthquakeList.addEventListener('change', function() {
         const selectedQuake = earthquakes[this.value];
-        document.getElementById('latitude').value = selectedQuake.lat;
-        document.getElementById('longitude').value = selectedQuake.lng;
+        document.getElementById('latitude').value = selectedQuake.geometry.coordinates[1];
+        document.getElementById('longitude').value = selectedQuake.geometry.coordinates[0];
     });
 
     // Select the first earthquake by default
     if (earthquakes.length > 0) {
         earthquakeList.selectedIndex = 0;
         const firstQuake = earthquakes[0];
-        document.getElementById('latitude').value = firstQuake.lat;
-        document.getElementById('longitude').value = firstQuake.lng;
+        document.getElementById('latitude').value = firstQuake.geometry.coordinates[1];
+        document.getElementById('longitude').value = firstQuake.geometry.coordinates[0];
     }
 }
 
@@ -60,9 +61,11 @@ document.getElementById('location-form').addEventListener('submit', function(eve
 
     const lat = document.getElementById('latitude').value;
     const lng = document.getElementById('longitude').value;
+    const proxyUrl = 'https://api.allorigins.win/get?url=';
     const geoNamesUrl = `http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=jimiliapis`;
+    const fullUrl = `${proxyUrl}${encodeURIComponent(geoNamesUrl)}`;
 
-    fetch(geoNamesUrl)
+    fetch(fullUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -70,9 +73,10 @@ document.getElementById('location-form').addEventListener('submit', function(eve
             return response.json();
         })
         .then(data => {
-            console.log('GeoNames Location API response:', data);
-            if (data.geonames && data.geonames.length > 0) {
-                const location = data.geonames[0];
+            const jsonData = JSON.parse(data.contents);
+            console.log('GeoNames Location API response:', jsonData);
+            if (jsonData.geonames && jsonData.geonames.length > 0) {
+                const location = jsonData.geonames[0];
                 document.getElementById('neighborhood-info').innerText = `Location: ${location.name}, ${location.countryName}`;
                 localStorage.setItem('lastSearch', JSON.stringify(location));
                 showModal(`Location: ${location.name}, ${location.countryName}`);

@@ -5,10 +5,10 @@
 The Neighborhood Info App is an interactive front-end application that provides detailed information about the most recent earthquakes. Users can search for the top 10 most recent earthquakes, view their magnitude, coordinates, and date, and find detailed location information for the selected earthquake coordinates.
 
 ## Features
-- Fetches and displays the top 10 most recent earthquakes using the GeoNames Earthquake API.
+- Fetches and displays the top 10 most recent earthquakes using the USGS Earthquake API.
 - Displays earthquake details (date, magnitude, coordinates) in a dropdown menu.
 - Allows users to select an earthquake from the dropdown to view its coordinates.
-- Fetches and displays detailed location information for the selected earthquake coordinates using the GeoNames Nearby Place Name API.
+- Fetches and displays detailed location information for the selected earthquake coordinates using the GeoNames Nearby Place Name API through a CORS proxy.
 - Uses client-side storage to store the last searched location.
 - Responsive and interactive UI.
 - Includes modal functionality to display detailed location information.
@@ -17,8 +17,9 @@ The Neighborhood Info App is an interactive front-end application that provides 
 - HTML
 - CSS
 - JavaScript
-- GeoNames Earthquake API
+- USGS Earthquake API
 - GeoNames Nearby Place Name API
+- CORS Proxy (AllOrigins)
 
 ## Usage
 1. Click the "Find Earthquakes" button to fetch the top 10 most recent earthquakes.
