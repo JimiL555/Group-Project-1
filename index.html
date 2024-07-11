@@ -3,42 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <title>GeoNames Postal Code Search</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <section class="section">
-        <div class="container has-text-centered">
-            <div class="box" id="search-box">
-                <h1 class="title">Weather Dashboard</h1>
-                <div class="field has-addons is-justify-content-center">
-                    <div class="control">
-                        <input class="input" type="text" placeholder="Enter city name" id="city-input">
-                    </div>
-                    <div class="control">
-                        <input class="input" type="text" placeholder="Enter state (e.g., NY)" id="state-input">
-                    </div>
-                    <div class="control">
-                        <button class="button is-info" id="search-btn">Search</button>
-                    </div>
-                </div>
-            </div>
-            <div id="weather-container" class="has-text-centered"></div>
-        </div>
-    </section>
-
-    <!-- Modal -->
-    <div class="modal" id="weather-modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <p id="modal-content"></p>
-            </div>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
+    <header>
+        <h1>GeoNames Postal Code Search</h1>
+    </header>
+    <main>
+        <section id="search-section">
+            <input type="text" id="postalcode" placeholder="Enter Postal Code">
+            <button id="search-btn">Search</button>
+        </section>
+        <section id="results-section">
+            <!-- Results will be displayed here -->
+        </section>
+    </main>
     <script src="js/script.js"></script>
 </body>
 </html>

@@ -1,50 +1,55 @@
-// script.js
-document.addEventListener('DOMContentLoaded', () => {
-    const searchBtn = document.getElementById('search-btn');
-    const cityInput = document.getElementById('city-input');
-    const stateInput = document.getElementById('state-input');
-    const weatherContainer = document.getElementById('weather-container');
-    const weatherModal = document.getElementById('weather-modal');
-    const modalContent = document.getElementById('modal-content');
-    const modalClose = document.querySelector('.modal-close');
+document.getElementById('search-btn').addEventListener('click', function() {
+    const postalCode = document.getElementById('postalcode').value;
+    localStorage.setItem('lastSearchedPostalCode', postalCode); // Store the postal code
+    const apiUrl = `http://api.geonames.org/postalCodeSearch?postalcode=${postalCode}&maxRows=10&username=jimiliapis`;
 
-    const apiKey = '7ac58449a473e1de5175cb512d47a950'; // Replace with your OpenWeatherMap API key
-
-    searchBtn.addEventListener('click', () => {
-        const city = cityInput.value.trim();
-        const state = stateInput.value.trim();
-        if (city && state) {
-            getWeather(city, state);
-        } else {
-            alert('Please enter both city and state names.');
-        }
-    });
-
-    async function getWeather(city, state) {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state},US&appid=${apiKey}&units=metric`);
-        const data = await response.json();
-        displayWeather(data);
-    }
-
-    function displayWeather(data) {
-        const { name, main, weather } = data;
-        const weatherHTML = `
-            <div class="box">
-                <h2 class="subtitle">${name}</h2>
-                <p>Temperature: ${main.temp} °C</p>
-                <p>Weather: ${weather[0].description}</p>
-                <button class="button is-info" onclick="openModal('${weather[0].description}')">More Info</button>
-            </div>
-        `;
-        weatherContainer.innerHTML = weatherHTML;
-    }
-
-    function openModal(info) {
-        modalContent.textContent = info;
-        weatherModal.classList.add('is-active');
-    }
-
-    modalClose.addEventListener('click', () => {
-        weatherModal.classList.remove('is-active');
-    });
+    fetch(apiUrl)
+        .then(response => response.text())
+        .then(data => {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(data, "application/xml");
+            const codes = xmlDoc.getElementsByTagName("code");
+            displayResults(codes);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const lastSearchedPostalCode = localStorage.getItem('lastSearchedPostalCode');
+    if (lastSearchedPostalCode) {
+        document.getElementById('postalcode').value = lastSearchedPostalCode;
+    }
+});
+
+function displayResults(codes) {
+    const resultsSection = document.getElementById('results-section');
+    resultsSection.innerHTML = ''; // Clear previous results
+
+    if (codes.length === 0) {
+        resultsSection.innerHTML = '<p>No results found.</p>';
+        return;
+    }
+
+    for (let i = 0; i < codes.length; i++) {
+        const postalcode = codes[i].getElementsByTagName("postalcode")[0].textContent;
+        const name = codes[i].getElementsByTagName("name")[0].textContent;
+        const countryCode = codes[i].getElementsByTagName("countryCode")[0].textContent;
+        const adminName1 = codes[i].getElementsByTagName("adminName1")[0].textContent;
+        const adminName2 = codes[i].getElementsByTagName("adminName2")[0].textContent;
+
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'result';
+
+        resultDiv.innerHTML = `
+            <p><strong>Postal Code:</strong> ${postalcode}</p>
+            <p><strong>Place Name:</strong> ${name}</p>
+            <p><strong>Country Code:</strong> ${countryCode}</p>
+            <p><strong>Admin Name 1:</strong> ${adminName1}</p>
+            <p><strong>Admin Name 2:</strong> ${adminName2}</p>
+        `;
+
+        resultsSection.appendChild(resultDiv);
+    }
+}
