@@ -15,7 +15,7 @@ document.getElementById('find-earthquakes').addEventListener('click', function()
                     const dateA = new Date(a.properties.time);
                     const dateB = new Date(b.properties.time);
                     return dateB - dateA;
-                }).slice(0, 10);
+                }).slice(0, 20); // Change to 20
                 populateEarthquakeList(sortedEarthquakes);
             } else {
                 alert('No earthquakes found. Please try again.');
