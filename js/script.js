@@ -1,55 +1,107 @@
-document.getElementById('search-btn').addEventListener('click', function() {
-    const postalCode = document.getElementById('postalcode').value;
-    localStorage.setItem('lastSearchedPostalCode', postalCode); // Store the postal code
-    const apiUrl = `http://api.geonames.org/postalCodeSearch?postalcode=${postalCode}&maxRows=10&username=jimiliapis`;
+document.getElementById('find-earthquakes').addEventListener('click', function() {
+    const earthquakeUrl = `http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=jimiliapis`;
 
-    fetch(apiUrl)
-        .then(response => response.text())
+    fetch(earthquakeUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(data, "application/xml");
-            const codes = xmlDoc.getElementsByTagName("code");
-            displayResults(codes);
+            console.log('Earthquake API response:', data);
+            if (data.earthquakes && data.earthquakes.length > 0) {
+                const sortedEarthquakes = data.earthquakes.sort((a, b) => {
+                    const dateA = new Date(a.datetime);
+                    const dateB = new Date(b.datetime);
+                    return dateB - dateA;
+                }).slice(0, 10);
+                populateEarthquakeList(sortedEarthquakes);
+            } else {
+                alert('No earthquakes found. Please try again.');
+            }
         })
         .catch(error => {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching earthquake data:', error);
+            alert('An error occurred. Please try again.');
         });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const lastSearchedPostalCode = localStorage.getItem('lastSearchedPostalCode');
-    if (lastSearchedPostalCode) {
-        document.getElementById('postalcode').value = lastSearchedPostalCode;
+function populateEarthquakeList(earthquakes) {
+    const earthquakeList = document.getElementById('earthquake-list');
+    earthquakeList.innerHTML = '';
+
+    earthquakes.forEach((quake, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.text = `Date: ${quake.datetime}, Magnitude: ${quake.magnitude}, Coordinates: (${quake.lat}, ${quake.lng})`;
+        option.dataset.lat = quake.lat;
+        option.dataset.lng = quake.lng;
+        earthquakeList.add(option);
+    });
+
+    earthquakeList.addEventListener('change', function() {
+        const selectedQuake = earthquakes[this.value];
+        document.getElementById('latitude').value = selectedQuake.lat;
+        document.getElementById('longitude').value = selectedQuake.lng;
+    });
+
+    // Select the first earthquake by default
+    if (earthquakes.length > 0) {
+        earthquakeList.selectedIndex = 0;
+        const firstQuake = earthquakes[0];
+        document.getElementById('latitude').value = firstQuake.lat;
+        document.getElementById('longitude').value = firstQuake.lng;
     }
+}
+
+document.getElementById('location-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const lat = document.getElementById('latitude').value;
+    const lng = document.getElementById('longitude').value;
+    const geoNamesUrl = `http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&username=jimiliapis`;
+
+    fetch(geoNamesUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('GeoNames Location API response:', data);
+            if (data.geonames && data.geonames.length > 0) {
+                const location = data.geonames[0];
+                document.getElementById('neighborhood-info').innerText = `Location: ${location.name}, ${location.countryName}`;
+                localStorage.setItem('lastSearch', JSON.stringify(location));
+                showModal(`Location: ${location.name}, ${location.countryName}`);
+            } else {
+                document.getElementById('neighborhood-info').innerText = 'No detailed location found for these coordinates.';
+                showModal('No detailed location found for these coordinates.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('neighborhood-info').innerText = 'An error occurred. Please try again.';
+            showModal('An error occurred. Please try again.');
+        });
 });
 
-function displayResults(codes) {
-    const resultsSection = document.getElementById('results-section');
-    resultsSection.innerHTML = ''; // Clear previous results
+function showModal(content) {
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modal-body');
+    modalBody.innerHTML = `<p>${content}</p>`;
+    modal.style.display = "block";
 
-    if (codes.length === 0) {
-        resultsSection.innerHTML = '<p>No results found.</p>';
-        return;
-    }
+    const closeBtn = document.getElementsByClassName('close')[0];
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    };
 
-    for (let i = 0; i < codes.length; i++) {
-        const postalcode = codes[i].getElementsByTagName("postalcode")[0].textContent;
-        const name = codes[i].getElementsByTagName("name")[0].textContent;
-        const countryCode = codes[i].getElementsByTagName("countryCode")[0].textContent;
-        const adminName1 = codes[i].getElementsByTagName("adminName1")[0].textContent;
-        const adminName2 = codes[i].getElementsByTagName("adminName2")[0].textContent;
-
-        const resultDiv = document.createElement('div');
-        resultDiv.className = 'result';
-
-        resultDiv.innerHTML = `
-            <p><strong>Postal Code:</strong> ${postalcode}</p>
-            <p><strong>Place Name:</strong> ${name}</p>
-            <p><strong>Country Code:</strong> ${countryCode}</p>
-            <p><strong>Admin Name 1:</strong> ${adminName1}</p>
-            <p><strong>Admin Name 2:</strong> ${adminName2}</p>
-        `;
-
-        resultsSection.appendChild(resultDiv);
-    }
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
 }
