@@ -1,5 +1,5 @@
 document.getElementById('find-earthquakes').addEventListener('click', function() {
-    const earthquakeUrl = `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson`;
+    const earthquakeUrl = `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson`;
 
     fetch(earthquakeUrl)
         .then(response => {
@@ -11,11 +11,22 @@ document.getElementById('find-earthquakes').addEventListener('click', function()
         .then(data => {
             console.log('Earthquake API response:', data);
             if (data.features && data.features.length > 0) {
-                const sortedEarthquakes = data.features.sort((a, b) => {
+                // Log the magnitude of each earthquake
+                data.features.forEach(quake => {
+                    console.log(`Magnitude: ${quake.properties.mag}`);
+                });
+
+                // Filter earthquakes by magnitude of 2.0 or higher
+                const filteredEarthquakes = data.features.filter(quake => quake.properties.mag >= 2.0);
+                console.log('Filtered Earthquakes:', filteredEarthquakes);
+
+                // Sort the filtered earthquakes by most recent date
+                const sortedEarthquakes = filteredEarthquakes.sort((a, b) => {
                     const dateA = new Date(a.properties.time);
                     const dateB = new Date(b.properties.time);
                     return dateB - dateA;
-                }).slice(0, 20); // Change to 20
+                }).slice(0, 10); // Take the top 10
+                console.log('Sorted Earthquakes:', sortedEarthquakes);
                 populateEarthquakeList(sortedEarthquakes);
             } else {
                 alert('No earthquakes found. Please try again.');
