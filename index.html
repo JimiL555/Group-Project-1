@@ -3,30 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neighborhood Info App</title>
+    <title>Seismic Insight</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Neighborhood Information</h1>
-        <button id="find-earthquakes">Find Earthquakes</button>
-        <div id="earthquake-list-container">
+    <header>
+        <h1>Seismic Locator</h1>
+    </header>
+    <main class="container">
+        <section id="search-section">
+            <button id="find-earthquakes" class="btn">Find Earthquakes</button>
+        </section>
+        <section id="earthquake-list-container" class="hidden">
             <h2>Top 10 Most Recent Earthquakes</h2>
-            <select id="earthquake-list"></select>
-        </div>
-        <form id="location-form">
-            <input type="text" id="latitude" placeholder="Enter Latitude" readonly>
-            <input type="text" id="longitude" placeholder="Enter Longitude" readonly>
-            <button type="submit">Get Info</button>
-        </form>
-        <div id="neighborhood-info"></div>
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div id="modal-body"></div>
-            </div>
+            <select id="earthquake-list" class="dropdown"></select>
+        </section>
+        <section id="location-section" class="hidden">
+            <form id="location-form">
+                <input type="text" id="latitude" placeholder="Latitude" readonly class="input-field">
+                <input type="text" id="longitude" placeholder="Longitude" readonly class="input-field">
+                <button type="submit" class="btn">Get Info</button>
+            </form>
+        </section>
+        <section id="info-section">
+            <div id="neighborhood-info"></div>
+        </section>
+    </main>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
         </div>
     </div>
+    <footer>
+        <p>© 2024 Seismic Insight. All rights reserved.</p>
+    </footer>
     <script src="js/script.js"></script>
 </body>
 </html>

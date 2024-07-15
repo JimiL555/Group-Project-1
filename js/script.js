@@ -11,30 +11,18 @@ document.getElementById('find-earthquakes').addEventListener('click', function()
         .then(data => {
             console.log('Earthquake API response:', data);
             if (data.features && data.features.length > 0) {
-                // Log the magnitude of each earthquake
-                data.features.forEach(quake => {
-                    console.log(`Magnitude: ${quake.properties.mag}`);
-                });
-
-                // Filter earthquakes by magnitude of 2.0 or higher
                 const filteredEarthquakes = data.features.filter(quake => quake.properties.mag >= 2.0);
-                console.log('Filtered Earthquakes:', filteredEarthquakes);
-
-                // Sort the filtered earthquakes by most recent date
-                const sortedEarthquakes = filteredEarthquakes.sort((a, b) => {
-                    const dateA = new Date(a.properties.time);
-                    const dateB = new Date(b.properties.time);
-                    return dateB - dateA;
-                }).slice(0, 10); // Take the top 10
-                console.log('Sorted Earthquakes:', sortedEarthquakes);
+                const sortedEarthquakes = filteredEarthquakes.sort((a, b) => new Date(b.properties.time) - new Date(a.properties.time)).slice(0, 10);
                 populateEarthquakeList(sortedEarthquakes);
+                document.getElementById('earthquake-list-container').classList.remove('hidden');
+                document.getElementById('location-section').classList.remove('hidden');
             } else {
-                alert('No earthquakes found. Please try again.');
+                showModal('No earthquakes found. Please try again.');
             }
         })
         .catch(error => {
             console.error('Error fetching earthquake data:', error);
-            alert('An error occurred. Please try again.');
+            showModal('An error occurred. Please try again.');
         });
 });
 
@@ -58,7 +46,6 @@ function populateEarthquakeList(earthquakes) {
         document.getElementById('longitude').value = selectedQuake.geometry.coordinates[0];
     });
 
-    // Select the first earthquake by default
     if (earthquakes.length > 0) {
         earthquakeList.selectedIndex = 0;
         const firstQuake = earthquakes[0];
@@ -92,13 +79,11 @@ document.getElementById('location-form').addEventListener('submit', function(eve
                 localStorage.setItem('lastSearch', JSON.stringify(location));
                 showModal(`Location: ${location.name}, ${location.countryName}`);
             } else {
-                document.getElementById('neighborhood-info').innerText = 'No detailed location found for these coordinates.';
                 showModal('No detailed location found for these coordinates.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            document.getElementById('neighborhood-info').innerText = 'An error occurred. Please try again.';
             showModal('An error occurred. Please try again.');
         });
 });
