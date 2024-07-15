@@ -106,6 +106,10 @@ main {
     cursor: pointer;
 }
 
+.modal {
+    display: none;
+}
+
 footer {
     background-color: #333;
     color: #fff;

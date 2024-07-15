@@ -92,16 +92,16 @@ function showModal(content) {
     const modal = document.getElementById('modal');
     const modalBody = document.getElementById('modal-body');
     modalBody.innerHTML = `<p>${content}</p>`;
-    modal.style.display = "block";
+    modal.classList.remove('hidden');
 
     const closeBtn = document.getElementsByClassName('close')[0];
     closeBtn.onclick = function() {
-        modal.style.display = "none";
+        modal.classList.add('hidden');
     };
 
     window.onclick = function(event) {
         if (event.target === modal) {
-            modal.style.display = "none";
+            modal.classList.add('hidden');
         }
     };
 }
