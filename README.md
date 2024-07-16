@@ -1,36 +1,69 @@
 # Group-Project-1
-# Neighborhood Info App
 
-## Description
-The Neighborhood Info App is an interactive front-end application that provides detailed information about the most recent earthquakes. Users can search for the top 20 most recent earthquakes, view their magnitude, coordinates, and date, and find detailed location information for the selected earthquake coordinates.
+Seismic Locator
 
-## Features
-- Fetches and displays the top 20 most recent earthquakes using the USGS Earthquake API.
-- Displays earthquake details (date, magnitude, coordinates) in a dropdown menu.
-- Allows users to select an earthquake from the dropdown to view its coordinates.
-- Fetches and displays detailed location information for the selected earthquake coordinates using the GeoNames Nearby Place Name API through a CORS proxy.
-- Uses client-side storage to store the last searched location.
-- Responsive and interactive UI.
-- Includes modal functionality to display detailed location information.
+Description
 
-## Technologies Used
-- HTML
-- CSS
-- JavaScript
-- USGS Earthquake API
-- GeoNames Nearby Place Name API
-- CORS Proxy (AllOrigins)
+Seismic Locator is an interactive front-end application designed to provide users with real-time information on recent earthquake activity. The application utilizes data from multiple server-side APIs to display the most recent earthquakes and detailed location information based on user input. This tool is especially useful for individuals living in or traveling to earthquake-prone areas, helping them stay informed about seismic activity.
 
-## Usage
-1. Click the "Find Earthquakes" button to fetch the top 20 most recent earthquakes.
-2. Select an earthquake from the dropdown menu to view its coordinates.
-3. The latitude and longitude fields will be populated with the selected earthquake's coordinates.
-4. Click the "Get Info" button to fetch and display detailed location information for the selected coordinates.
+Motivation
 
-## Screenshots
-![Neighborhood Info App](screenshot.png)
+The primary motivation behind the development of Seismic Locator was to create an application that provides valuable, real-time data to users in a simple and interactive manner. By leveraging server-side APIs and presenting the data through a polished and responsive UI, Seismic Locator aims to enhance user awareness and preparedness for seismic events.
 
-## Deployed Application
-The application is deployed on GitHub Pages. You can access it [here](https://your-github-username.github.io/your-repo-name/).
+Features
 
-## Repository Structure
+	•	Real-Time Earthquake Data: Fetches and displays the top 10 most recent earthquakes with a magnitude of 2.0 or higher.
+	•	Location Information: Provides detailed location information based on selected earthquake coordinates.
+	•	Recent Searches: Stores and displays the user’s recent searches using client-side storage for easy access to previous queries.
+	•	Interactive UI: Responsive design with interactive elements such as buttons, forms, and modals.
+	•	Modal Display: Uses modals to present detailed information without relying on native browser alerts, confirms, or prompts.
+
+Technologies Used
+
+	•	HTML5
+	•	CSS3 (Tailwind CSS)
+	•	JavaScript (ES6)
+	•	Server-Side APIs:
+	•	USGS Earthquake API
+	•	GeoNames API (with proxy for CORS handling)
+	•	Client-Side Storage: Local Storage
+
+Usage
+
+	1.	Open the application.
+	2.	Click the “Find Earthquakes” button to fetch and display the most recent earthquakes.
+	3.	Select an earthquake from the dropdown list to view its coordinates.
+	4.	Submit the coordinates to get detailed location information.
+	5.	View recent searches at the bottom of the page.
+
+Folder Structure :
+
+Group-Project-1/
+├── css/
+│   └── styles.css
+├── js/
+│   └── script.js
+├── index.html
+└── README.md
+
+SCREENSHOT
+
+Future Development
+
+	•	Additional Filters: Add options for users to filter earthquakes by date, magnitude, or region.
+	•	Enhanced Mapping: Integrate a mapping service to visually plot earthquake locations.
+	•	Notifications: Implement a notification system to alert users of significant seismic events.
+
+Links
+
+	•	Deployed Application
+	•	GitHub Repository
+
+Contributors
+
+	•	Jimi - Developer
+	•	[Other Team Members]
+
+License
+
+This project is licensed under the MIT License.
