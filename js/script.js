@@ -125,16 +125,16 @@ function showModal(content) {
     const modal = document.getElementById('modal');
     const modalBody = document.getElementById('modal-body');
     modalBody.innerHTML = `<p>${content}</p>`;
-    modal.classList.remove('hidden');
+    modal.style.display = 'block';
 
     const closeBtn = document.getElementsByClassName('close')[0];
     closeBtn.onclick = function() {
-        modal.classList.add('hidden');
+        modal.style.display = 'none';
     };
 
     window.onclick = function(event) {
         if (event.target === modal) {
-            modal.classList.add('hidden');
+            modal.style.display = 'none';
         }
     };
 }

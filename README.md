@@ -61,8 +61,11 @@ Links
 
 Contributors
 
-	•	Jimi - Developer
-	•	[Other Team Members]
+	•	Jimi Liapis - Developer
+        Josh Levy -   Developer
+        Daniel Soto - Developer
+        Anu         - Developer
+	•	
 
 License
 
