@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+    displayRecentSearches();
+});
+
 document.getElementById('find-earthquakes').addEventListener('click', function() {
     const earthquakeUrl = `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson`;
 
@@ -22,7 +26,7 @@ document.getElementById('find-earthquakes').addEventListener('click', function()
         })
         .catch(error => {
             console.error('Error fetching earthquake data:', error);
-            showModal('An error occurred. Please try again.');
+            showModal('An error occurred while fetching earthquake data. Please try again.');
         });
 });
 
@@ -75,18 +79,47 @@ document.getElementById('location-form').addEventListener('submit', function(eve
             console.log('GeoNames Location API response:', jsonData);
             if (jsonData.geonames && jsonData.geonames.length > 0) {
                 const location = jsonData.geonames[0];
-                document.getElementById('neighborhood-info').innerText = `Location: ${location.name}, ${location.countryName}`;
-                localStorage.setItem('lastSearch', JSON.stringify(location));
-                showModal(`Location: ${location.name}, ${location.countryName}`);
+                let locationInfo = `Location: ${location.name}`;
+                if (location.countryCode === "US" && location.adminName1) {
+                    locationInfo += `, ${location.adminName1}, ${location.countryName}`;
+                } else {
+                    locationInfo += `, ${location.countryName}`;
+                }
+                document.getElementById('neighborhood-info').innerText = locationInfo;
+                saveSearchResult(locationInfo);
+                showModal(locationInfo);
             } else {
                 showModal('No detailed location found for these coordinates.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showModal('An error occurred. Please try again.');
+            showModal('An error occurred while fetching location data. Please try again.');
         });
 });
+
+function saveSearchResult(locationInfo) {
+    let searches = JSON.parse(localStorage.getItem('searches')) || [];
+    searches.unshift(locationInfo);
+    if (searches.length > 3) {
+        searches.pop();
+    }
+    localStorage.setItem('searches', JSON.stringify(searches));
+    displayRecentSearches();
+}
+
+function displayRecentSearches() {
+    const recentSearchesContainer = document.getElementById('recent-searches');
+    const searches = JSON.parse(localStorage.getItem('searches')) || [];
+    recentSearchesContainer.innerHTML = '';
+
+    searches.forEach(search => {
+        const searchItem = document.createElement('div');
+        searchItem.className = 'search-item';
+        searchItem.textContent = search;
+        recentSearchesContainer.appendChild(searchItem);
+    });
+}
 
 function showModal(content) {
     const modal = document.getElementById('modal');
