@@ -89,6 +89,9 @@ document.getElementById('location-form').addEventListener('submit', function(eve
                 saveSearchResult(locationInfo);
                 showModal(locationInfo);
             } else {
+                const fallbackLocation = `Location: ${lat}, ${lng}`;
+                document.getElementById('neighborhood-info').innerText = fallbackLocation;
+                saveSearchResult(fallbackLocation);
                 showModal('No detailed location found for these coordinates.');
             }
         })
