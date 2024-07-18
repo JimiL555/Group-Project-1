@@ -62,9 +62,9 @@ Links
 Contributors
 
 	•	Jimi Liapis - Developer
-        Josh Levy -   Developer
+        Josh Levy   - Developer
         Daniel Soto - Developer
-        Anu         - Developer
+        Anu Kitzer  - Developer
 	•	
 
 License
