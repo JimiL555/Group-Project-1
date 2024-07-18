@@ -56,8 +56,8 @@ Future Development
 
 Links
 
-	•	Deployed Application
-	•	GitHub Repository
+	•	Deployed Application URL - https://jimil555.github.io/Group-Project-1/
+	•	GitHub Repository - https://github.com/JimiL555/Group-Project-1.git
 
 Contributors
 
