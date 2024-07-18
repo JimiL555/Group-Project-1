@@ -64,7 +64,7 @@ Contributors
 	•	Jimi Liapis - Developer
         Josh Levy   - Developer
         Daniel Soto - Developer
-        Anu Kitzer  - Developer
+        Anu Kizer   - Developer
 	•	
 
 License
