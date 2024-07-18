@@ -66,7 +66,11 @@ Contributors
         Daniel Soto - Developer
         Anu Kizer   - Developer
 	•	
+	Anu Kizer / Josh Levy - Concept, Design & Functionality
+	Daniel Soto / Jimi Liapis - Concept, Functionality & Presentation
+	Each 4 members will be presenting a section of the project.
 
-License
+
+License:
 
 This project is licensed under the Seismic Locator LLC License.
